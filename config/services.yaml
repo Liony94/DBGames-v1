@@ -4,6 +4,7 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices.html#use-parameters-for-application-configuration
 parameters:
+    riot_api_key: 'RGAPI-7fee4913-3a90-4f5e-9309-b42a42b23273'
 
 services:
     # default configuration for services in *this* file
@@ -19,6 +20,10 @@ services:
             - '../src/DependencyInjection/'
             - '../src/Entity/'
             - '../src/Kernel.php'
+
+    App\Service\RiotService:
+        arguments:
+            $apiKey: '%riot_api_key%'
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
