@@ -18,24 +18,18 @@ p {
     color: #000000;
 }
 
-button {
+.firstButton {
     background-color: #7a515f;
     color: #ffffff;
 }
 
-button:hover {
+.firstButton:hover {
     background-color: #85666f;
     color: #ffffff;
 }
 
-.navButton {
-    background-color: #7a515f;
-    color: #ffffff;
-}
-
-.navButton:hover {
-    background-color: #85666f;
-    color: #ffffff;
+.firstColor {
+    color: #7a515f;
 }
 
 .headerNav {
