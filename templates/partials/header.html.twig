@@ -1,0 +1,22 @@
+<header class="text-gray-600 body-font">
+    <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
+        <a class="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
+            <img class="h-16 w-52 rounded-xl" src="data:image/webp;base64,UklGRuYCAABXRUJQVlA4INoCAADwEQCdASrQAEAAPp1OokulpKOhptXYyLATiWkAFcAdrXPD+dj/LEByBHIq1OMsVTzKf+z5Svqb2CekN6Gf6wEEQEqHUyoZB1YMA2HVrID3Ln9ZNyvA4lSEFEmjfuBSxzWAdV+ICK18kCVADqCsWB0eFpc376WEZrzFhE6tIFeAOCqD0WKY6pIJZg6ZSnss9g2OEBKh1MqDwAD+8QCAAjgXhPTn29dtPnoEgMVwXcGqNp9PB7nVi3c5SZFGyyyHqxk4HBxCcjefwbxUGjwz09Nqk/+F3IHv1Qn5XiZ00/+8vkY4xLYT5Ngh2Qgxi9haXI+aPz2s1/MwBBqvvvEfQZcDI6TCD0t7Vqz59kTo9CSoz9bsI5+W+V1AL7+Af+gCHmblzd9JMULf/x4rJB/pyyUkUpvA8KOFQG1aSPmZJOuZogVmQTs8mh1LYPqvbWfkGyrsP/uLZLbYdxUDmjFK8UMCPfOoY4lE+W7FuWfetkVYOsflCvVnaI4WOHm0E13J28s/ctgnAOudssDlhaOmlex8/qkj+fOEX9aS8v5WXe/cAM+osplLJWMF/5D9aP/ZvPl/j2f5fA5Wd5+uL0ff309QxkstzaZNwUqrTg6I1TEnFUtKNBcXfDMUan/tcix6tJon82VV6o2Ct4ea6swuit28MdJPRvDvmsoSOcn56Nh8VrUYB9hfHRPGB6W8GSX7KR2wHwzPazuS/ydYGSZedAqP50xkPa/ZUnYl6wKk57Qhg9v52fj6QDO9295EsdAc3EBE61m9znRuRWsvtXZoSySFn3zF8rDcv/wHWaUBXEXThRKmlt78YPQ/IYZQy7ika/YtdDp9wItbPxL6oKy6bI8HjCoBrnk3pmUwM9/w32Hp0nJQTTpy+rw+ly3j4ZeqHPY19eRX4wb1UH5w1TViDhfsVYrOCzC5Bva/aO3EHrfLrtLcXCWT2L5BZzD+gLGe5Dbz0dVvZQAAAAAA" alt="">
+        </a>
+        <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
+            <a href="{{ path('app_home') }}" class="headerNav mr-5 cursor-pointer ">Accueil</a>
+            <a class="headerNav mr-5 cursor-pointer">Actualités</a>
+            <a href="{{ path('app_library_lol') }}" class="headerNav mr-5 cursor-pointer">L'histoire</a>
+            <a class="headerNav mr-5 cursor-pointer">Swipe..</a>
+        </nav>
+        {%- if is_granted('ROLE_USER') -%}
+        <a href="{{ path('app_logout') }}" class="firstButton inline-flex items-center border-0 py-2 px-5 focus:outline-none rounded text-base text-white mt-4 hover:bg-opacity-80">
+            Déconnexion
+        </a>
+        {%- else -%}
+        <a href="{{ path('app_login') }}" class="firstButton inline-flex items-center border-0 py-2 px-5 focus:outline-none rounded text-base text-white mt-4 hover:bg-opacity-80">
+            Se connecter
+        </a>
+        {%- endif -%}
+    </div>
+</header>

@@ -1,3 +1,37 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+/*body {*/
+/*    background-color: #091428;*/
+/*}*/
+
+h1, h2 {
+    color: #7a515f;
+}
+
+h4 {
+    color: #a98d9f;
+}
+
+p {
+    color: #000000;
+}
+
+.firstButton {
+    background-color: #7a515f;
+    color: #ffffff;
+}
+
+.firstButton:hover {
+    background-color: #85666f;
+    color: #ffffff;
+}
+
+.firstColor {
+    color: #7a515f;
+}
+
+.headerNav {
+    color: #000000;
+}

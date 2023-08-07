@@ -1,0 +1,19 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello LibraryController!{% endblock %}
+
+{% block body %}
+    <div class="flex m-11 gap-10 flex-wrap">
+        {% for champion in champions %}
+            <div class="group flex w-auto max-w-xs cursor-pointer flex-col items-start gap-2 overflow-hidden rounded-lg shadow-md transition-all duration-300 hover:shadow-xl">
+                <img src="http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{{ champion.id }}_0.jpg" alt="{{ champion.name }} Splash" class="transition-all duration-300 group-hover:opacity-90" />
+                <div class="flex flex-col gap-4 p-4">
+                    <h2 class="text-2xl font-semibold">{{ champion.name }}</h2>
+                    <h4 class="font-bold">{{ champion.title }}</h4>
+                    <p class="text-base">{{ champion.blurb }}</p>
+                    <a class="firstButton w-[100px] rounded-md px-5 py-2 shadow-xl transition-all duration-300">Suite..</a>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
