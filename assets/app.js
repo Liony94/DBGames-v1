@@ -7,3 +7,23 @@
 
 // any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
+
+// Drowdown menu
+document.addEventListener('DOMContentLoaded', function() {
+    const dropdownButton = document.querySelector('.firstButton');
+    const dropdownMenu = document.querySelector('.origin-top-right');
+
+    dropdownButton.addEventListener('click', function(event) {
+        event.stopPropagation();
+        dropdownMenu.classList.toggle('hidden');
+    });
+
+    document.addEventListener('click', function() {
+        dropdownMenu.classList.add('hidden');
+    });
+
+    dropdownMenu.addEventListener('click', function(event) {
+        event.stopPropagation();
+    });
+});
+
