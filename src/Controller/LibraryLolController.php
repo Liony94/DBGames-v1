@@ -33,7 +33,7 @@ class LibraryLolController extends AbstractController
         ]);
     }
 
-    #[Route('/libraryLol/{id}', name: 'app_library_lol_champion')]
+    #[Route('/libraryLol/{id}', name: 'app_champion')]
     public function champion($id): Response
     {
         $champions = $this->riotService->getChampion();

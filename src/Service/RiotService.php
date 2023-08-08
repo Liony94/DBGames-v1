@@ -12,7 +12,7 @@ class RiotService
     public function __construct(string $apiKey)
     {
         $this->client = new Client([
-            'base_uri' => 'https://<RIOT_API_BASE_URL>', // remplacer par le bon URL
+            'base_uri' => 'https://<RIOT_API_BASE_URL>',
         ]);
         $this->apiKey = $apiKey;
     }
