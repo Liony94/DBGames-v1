@@ -1,29 +1,34 @@
-/*
- * Welcome to your app's main JavaScript file!
- *
- * We recommend including the built version of this JavaScript file
- * (and its CSS file) in your base layout (base.html.twig).
- */
-
-// any CSS you import will output into a single css file (app.css in this case)
 import './styles/app.css';
 
-// Drowdown menu
 document.addEventListener('DOMContentLoaded', function() {
-    const dropdownButton = document.querySelector('.firstButton');
-    const dropdownMenu = document.querySelector('.origin-top-right');
 
-    dropdownButton.addEventListener('click', function(event) {
-        event.stopPropagation();
-        dropdownMenu.classList.toggle('hidden');
+    const dropdownButtons = document.querySelectorAll('.firstButton, .dropdown-button');
+
+    dropdownButtons.forEach(button => {
+        button.addEventListener('click', function(event) {
+            event.stopPropagation();
+
+            const associatedDropdown = this.nextElementSibling;
+
+            if (!associatedDropdown.classList.contains('hidden')) {
+                associatedDropdown.classList.add('hidden');
+            } else {
+                const allDropdownMenus = document.querySelectorAll('.dropdown-menu, .origin-top-right');
+                allDropdownMenus.forEach(menu => {
+                    menu.classList.add('hidden');
+                });
+                associatedDropdown.classList.remove('hidden');
+            }
+        });
     });
 
     document.addEventListener('click', function() {
-        dropdownMenu.classList.add('hidden');
-    });
-
-    dropdownMenu.addEventListener('click', function(event) {
-        event.stopPropagation();
+        const allDropdownMenus = document.querySelectorAll('.dropdown-menu, .origin-top-right');
+        allDropdownMenus.forEach(menu => {
+            menu.classList.add('hidden');
+        });
     });
 });
+
+
 

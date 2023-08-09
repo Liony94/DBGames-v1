@@ -1,0 +1,24 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Lol Labs{% endblock %}
+
+{% block stylesheets %}
+    {{ encore_entry_link_tags('lol') }}
+{% endblock %}
+
+{% block body %}
+    <section class="py-24 flex items-center min-h-screen justify-center">
+        <div class="mx-auto max-w-[43rem] mt-[-15%]">
+            <div class="text-center">
+                <p class="text-lg font-medium leading-8">League of Labs</p>
+                <h1 class="mt-3 text-[3.5rem] font-bold leading-[4rem] tracking-tight">Bienvenue invocateur ! Qu'est ce qui t'ammène ici ?</h1>
+                <p class="subText mt-3 text-lg leading-relaxed">Actualités, Informations, E-sport, streaming</p>
+            </div>
+
+            <div class="mt-6 flex items-center justify-center gap-4">
+                <a href="#" class="firstButton transform rounded-md px-5 py-3 font-medium text-white">Espionne un joueur ?</a>
+                <a href="{{ path('app_library_lol') }}" class="secondButton transform rounded-md border border-slate-200 px-5 py-3 font-medium text-slate-900 transition-colors hover:bg-slate-50">Découvre le Lores </a>
+            </div>
+        </div>
+    </section>
+{% endblock %}
