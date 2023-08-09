@@ -13,15 +13,24 @@
         <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
             <a href="{{ path('app_home') }}" class="headerNav mr-5 cursor-pointer ">Accueil</a>
             <a class="headerNav mr-5 cursor-pointer">Actualités</a>
-            <a href="{{ path('app_library_lol') }}" class="headerNav mr-5 cursor-pointer">L'histoire</a>
-            <a class="headerNav mr-5 cursor-pointer">Swipe..</a>
+            <a href="#" class="headerNav mr-5 cursor-pointer">Nous contacter</a>
+            <div class="relative inline-block text-left">
+                <a class="headerNav mr-5 cursor-pointer dropdown-button">Jeux..</a>
+                <div class="navBarButtonDropdown origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10 hidden dropdown-menu">
+                    <div class="py-1">
+                        <a href="{{ path('app_league_of_legends_home') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">League of Legends</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Jeu 2</a>
+                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Jeu 3</a>
+                    </div>
+                </div>
+            </div>
         </nav>
         {%- if is_granted('ROLE_USER') -%}
             <div class="relative inline-block text-left">
                 <button class="firstButton inline-flex items-center border-0 py-2 px-5 focus:outline-none rounded text-base text-white mt-4 hover:bg-opacity-80">
                     {{ app.user.username }} <svg class="w-5 h-5 ml-2 -mr-1" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
                 </button>
-                <div class="origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10 hidden">
+                <div class="navBarButtonDropdown origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10 hidden">
                     <div class="py-1">
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mon Profil</a>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Amis</a>
