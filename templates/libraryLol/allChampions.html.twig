@@ -62,6 +62,7 @@
                 </div>
             </div>
         {% endfor %}
+        <button id="scrollTopBtn" class="firstButton fixed bottom-5 right-5 w-14 h-14 p-3 rounded-full text-white text-xl opacity-0 transition-opacity duration-300 hidden flex items-center justify-center" onclick="scrollToTop()">↑</button>
     </div>
 
     <script>
@@ -93,6 +94,22 @@
             document.getElementById('statsmodal' + championId).classList.add('hidden');
             document.getElementById('infomodal' + championId).classList.add('hidden');
         }
+
+        function scrollToTop() {
+            window.scrollTo({top: 0, behavior: 'smooth'});
+        }
+
+        window.addEventListener('scroll', function() {
+            let button = document.getElementById('scrollTopBtn');
+
+            if (window.pageYOffset > 300) {
+                button.style.opacity = "1";
+                button.classList.remove('hidden');
+            } else {
+                button.style.opacity = "0";
+                setTimeout(() => { button.classList.add('hidden'); }, 300);
+            }
+        });
 
         document.addEventListener('click', function(event) {
             let modals = document.querySelectorAll('[id^="modal"]');
