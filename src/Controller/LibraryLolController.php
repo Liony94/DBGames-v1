@@ -21,15 +21,9 @@ class LibraryLolController extends AbstractController
     {
         $champions = $this->riotService->getChampion();
         $allChampions = $champions['data'];
-        $randomChampion = array_rand($allChampions, 154);
-        $selectedChampions = [];
-
-        foreach ($randomChampion as $champion) {
-            $selectedChampions[] = $allChampions[$champion];
-        }
 
         return $this->render('libraryLol/allChampions.html.twig', [
-            'champions' => $selectedChampions,
+            'champions' => $allChampions,
         ]);
     }
 
