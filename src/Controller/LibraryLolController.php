@@ -21,7 +21,7 @@ class LibraryLolController extends AbstractController
     {
         $champions = $this->riotService->getChampion();
         $allChampions = $champions['data'];
-        $randomChampion = array_rand($allChampions, 10);
+        $randomChampion = array_rand($allChampions, 154);
         $selectedChampions = [];
 
         foreach ($randomChampion as $champion) {
@@ -33,15 +33,15 @@ class LibraryLolController extends AbstractController
         ]);
     }
 
-    #[Route('/libraryLol/{id}', name: 'app_champion')]
-    public function champion($id): Response
-    {
-        $champions = $this->riotService->getChampion();
-        $allChampions = $champions['data'];
-        $selectedChampion = $allChampions[$id];
-
-        return $this->render('libraryLol/champion.html.twig', [
-            'champion' => $selectedChampion,
-        ]);
-    }
+//    #[Route('/libraryLol/{id}', name: 'app_champion')]
+//    public function champion($id): Response
+//    {
+//        $champions = $this->riotService->getChampion();
+//        $allChampions = $champions['data'];
+//        $selectedChampion = $allChampions[$id];
+//
+//        return $this->render('libraryLol/champion.html.twig', [
+//            'champion' => $selectedChampion,
+//        ]);
+//    }
 }
