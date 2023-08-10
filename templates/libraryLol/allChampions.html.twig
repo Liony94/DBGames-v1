@@ -15,12 +15,12 @@
         <div class="flex m-11 gap-10 flex-wrap w-full max-w-6xl">
         {% for champion in champions %}
             <div onclick="openModal('modal{{ champion.id }}')" class="group flex w-auto max-w-xs cursor-pointer flex-col items-start gap-2 overflow-hidden rounded-lg shadow-md transition-all duration-300 hover:shadow-xl championCard">
-                <img src="http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{{ champion.id }}_0.jpg" alt="{{ champion.name }} Splash" class="transition-all duration-300 group-hover:opacity-90" />
+                <img src="http://ddragon.leagueoflegends.com/cdn/img/champion/splash/{{ champion.id }}_0.jpg" alt="{{ champion.name }} Splash" class="borderCard transition-all duration-300 group-hover:opacity-90" />
                 <div class="flex flex-col gap-4 p-4">
                     <h2 class="text-2xl font-semibold">{{ champion.name }}</h2>
                     <h4 class="championTitle font-bold">{{ champion.title }}</h4>
                     <p class="championStory text-base">{{ champion.blurb }}</p>
-                    <button onclick="openModal('modal{{ champion.id }}')" class="firstButton w-[100px] rounded-md px-5 py-2 shadow-xl transition-all duration-300">
+                    <button onclick="openModal('modal{{ champion.id }}')" class="firstButton colorText w-[100px] rounded-md px-5 py-2 shadow-xl transition-all duration-300">
                         Suite..
                     </button>
                 </div>
