@@ -44,6 +44,8 @@ class RegistrationFormType extends AbstractType
                     ]),
                 ],
             ])
+            ->add('age')
+            ->add('city')
         ;
     }
 

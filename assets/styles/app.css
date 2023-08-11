@@ -35,3 +35,35 @@ p {
 .headerNav {
     color: #000000;
 }
+
+input[name="user_profile[username]"] {
+    border: none;
+    background-color: transparent;
+    font-size: 2em;
+    font-weight: bold;
+    outline: none;
+}
+
+input[name="user_profile[username]"]:focus {
+    background-color: #f5f5f5;
+}
+
+.username-edit.hidden {
+    display: none;
+}
+
+input[name="description_profile[description]"] {
+    border: none;
+    background-color: transparent;
+    font-size: 2em;
+    font-weight: bold;
+    outline: none;
+}
+
+input[name="description_profile[description]"]:focus {
+    background-color: #f5f5f5;
+}
+
+.username-edit.hidden {
+    display: none;
+}
