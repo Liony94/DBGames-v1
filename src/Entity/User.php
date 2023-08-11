@@ -34,8 +34,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, unique: true)]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    private ?string $age = null;
+    #[ORM\Column(type: 'date', nullable: true)]
+    private ?\DateTimeInterface $age = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $city = null;
@@ -139,15 +139,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    public function getAge(): ?string
+    public function getAge(): \DateTimeInterface
     {
         return $this->age;
     }
 
-    public function setAge(?string $age): static
+    public function setAge(?\DateTimeInterface $age): static
     {
         $this->age = $age;
-
         return $this;
     }
 
