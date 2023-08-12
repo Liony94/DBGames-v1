@@ -25,6 +25,11 @@ Encore
 
     // When enabled, Webpack "splits" your files into smaller pieces for greater optimization.
     .splitEntryChunks()
+    .copyFiles({
+        from: './assets/images',
+        pattern: /.(png|jpg|jpeg|svg|gif)$/,
+        to: 'images/[path][name].[ext]',
+    })
 
     // will require an extra script tag for runtime.js
     // but, you probably want this, unless you're building a single-page app
