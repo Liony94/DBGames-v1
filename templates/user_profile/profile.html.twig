@@ -172,6 +172,9 @@
             if (!$(event.target).closest('#gamesContainer').length) {
                 cancelEdit('.games-edit', '.games-display');
             }
+            if (!$(event.target).closest('#cityContainer').length) {
+                cancelEdit('.city-edit', '.city-display');
+            }
         });
 
         function cancelEdit(editSelector, displaySelector) {
