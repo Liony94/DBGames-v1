@@ -2,7 +2,9 @@
 
 namespace App\Controller;
 
+use App\Form\UserCityProfileType;
 use App\Form\UserDescriptionProfileType;
+use App\Form\UserGamesProfileType;
 use App\Form\UsernameProfileType;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -19,46 +21,53 @@ class UserProfileController extends AbstractController
         $user = $this->getUser();
 
         if (!$user) {
-            return $this->redirectToRoute('app_login');
+            return $this->redirectToLogin();
         }
 
         $formUser = $this->createForm(UsernameProfileType::class, $user);
-
-        $formUser->handleRequest($request);
-        if ($formUser->isSubmitted() && $formUser->isValid()) {
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            if ($request->isXmlHttpRequest()) {
-                return new JsonResponse(['message' => 'Mis à jour avec succès!']);
-            }
-
-            $this->addFlash('success', 'Profil mis à jour avec succès !');
-            return $this->redirectToRoute('app_user_profile');
-        }
-
         $formDescription = $this->createForm(UserDescriptionProfileType::class, $user);
+        $formGames = $this->createForm(UserGamesProfileType::class, $user);
+        $formCity = $this->createForm(UserCityProfileType::class, $user);
 
-        $formDescription->handleRequest($request);
-        if ($formDescription->isSubmitted() && $formDescription->isValid()) {
-            $entityManager->persist($user);
-            $entityManager->flush();
-
-            if ($request->isXmlHttpRequest()) {
-                return new JsonResponse(['message' => 'Mis à jour avec succès!']);
-            }
-
-            $this->addFlash('success', 'Profil mis à jour avec succès !');
+        if ($this->handleForm($formUser, $request, $entityManager) || $this->handleForm($formDescription, $request, $entityManager) || $this->handleForm($formGames, $request, $entityManager) || $this->handleForm($formCity, $request, $entityManager)) {
             return $this->redirectToRoute('app_user_profile');
         }
 
-        $username = $user->getUsername();
-        $avatarUrl = "https://avatars.dicebear.com/api/human/$username.svg";
+        $avatarUrl = $this->getAvatarUrl($user->getUsername());
 
         return $this->render('user_profile/profile.html.twig', [
             'formUser' => $formUser->createView(),
             'formDescription' => $formDescription->createView(),
+            'formCity' => $formCity->createView(),
+            'formGames' => $formGames->createView(),
             'avatarUrl' => $avatarUrl,
         ]);
+    }
+
+    private function redirectToLogin(): Response
+    {
+        return $this->redirectToRoute('app_login');
+    }
+
+    private function handleForm($form, Request $request, EntityManagerInterface $entityManager): bool
+    {
+        $form->handleRequest($request);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $entityManager->persist($this->getUser());
+            $entityManager->flush();
+
+            if ($request->isXmlHttpRequest()) {
+                return new JsonResponse(['message' => 'Mis à jour avec succès!']);
+            }
+
+            $this->addFlash('success', 'Profil mis à jour avec succès !');
+            return true;
+        }
+        return false;
+    }
+
+    private function getAvatarUrl(string $username): string
+    {
+        return "https://avatars.dicebear.com/api/human/$username.svg";
     }
 }
