@@ -11,7 +11,7 @@ class UserLolSearchController extends AbstractController
     #[Route('/user/lol/search', name: 'app_user_lol_search')]
     public function index(): Response
     {
-        return $this->render('user_lol_search/index.html.twig', [
+        return $this->render('user_lol_search/main.html.twig', [
             'controller_name' => 'UserLolSearchController',
         ]);
     }

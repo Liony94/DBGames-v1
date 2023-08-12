@@ -11,7 +11,7 @@ class LeagueOfLegendsHomeController extends AbstractController
     #[Route('/league/of/legends/home', name: 'app_league_of_legends_home')]
     public function index(): Response
     {
-        return $this->render('league_of_legends_home/index.html.twig', [
+        return $this->render('league_of_legends_home/main.html.twig', [
             'controller_name' => 'LeagueOfLegendsHomeController',
         ]);
     }

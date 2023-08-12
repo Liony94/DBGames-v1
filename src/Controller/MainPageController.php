@@ -2,18 +2,17 @@
 
 namespace App\Controller;
 
-use App\Service\RiotService;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
-class HomeController extends AbstractController
+class MainPageController extends AbstractController
 {
-    #[Route('/', name: 'app_home')]
+    #[Route('/main/page', name: 'app_main_page')]
     public function index(): Response
     {
-        return $this->render('home/main.html.twig', [
-            'controller_name' => 'HomeController',
+        return $this->render('main_page/main.html.twig', [
+            'controller_name' => 'MainPageController',
         ]);
     }
 }
