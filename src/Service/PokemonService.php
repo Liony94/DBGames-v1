@@ -12,10 +12,10 @@ class PokemonService {
         $this->client = $client;
     }
 
-    public function getPokemonList(int $limit = 1281, int $offset = 0): array
+    public function getPokemonList(int $limit = 50, int $page = 1): array
     {
+        $offset = ($page - 1) * $limit;
         $response = $this->client->request('GET', self::BASE_URL . "?limit=$limit&offset=$offset");
-
         return $response->toArray();
     }
 

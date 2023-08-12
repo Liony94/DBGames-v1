@@ -29,25 +29,25 @@
                         <img class="w-32 h-32 rounded-full mx-auto" src="{{ pokemon.sprite }}" alt="Pokemon picture">
                         <h2 class="text-center text-2xl font-semibold mt-3">{{ pokemon.name }}</h2>
                         <div class="flex justify-center mt-5">
-                            <a href="#" onclick="showTypes('{{ pokemon.id }}')" class="firstColor mx-3">Types</a>
                             <a href="#" onclick="showStats('{{ pokemon.id }}')" class="firstColor mx-3">Stats</a>
+                            <a href="#" onclick="showInfo('{{ pokemon.id }}')" class="firstColor mx-3">Evolutions</a>
                         </div>
-                        <div id="typesmodal{{ pokemon.id }}" class="mt-5">
-                            <h3 class="text-xl font-semibold">Types</h3>
-                            <div class="flex flex-wrap justify-center mt-2">
-                                {% for type in pokemon.apiTypes %}
-                                    <span class="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ type.name }}</span>
+                        <div id="statsmodal{{ pokemon.id }}" class="mt-5">
+                            <h3 class="text-xl font-semibold mb-4">Stats</h3>
+                            <div class="grid grid-cols-3 gap-4">
+                                {% for statKey, statValue in pokemon.stats %}
+                                    <div class="bg-gray-100 p-3 rounded-lg transition-transform transform hover:scale-105 overflow-hidden">
+                                        <p class="font-bold text-xs text-gray-600 truncate">{{ statKey|capitalize }}</p>
+                                        <p class="text-md text-gray-800 truncate">{{ statValue }}</p>
+                                    </div>
                                 {% endfor %}
                             </div>
                         </div>
-                        <div id="statsmodal{{ pokemon.id }}" class="mt-5 hidden">
-                            <h3 class="text-xl font-semibold mb-4">Stats</h3>
-                            <div class="grid grid-cols-3 gap-4">
-                                {% for stats, statValue in pokemon.stats %}
-                                    <div class="bg-gray-100 p-3 rounded-lg transition-transform transform hover:scale-105 overflow-hidden">
-                                        <p class="font-bold text-xs text-gray-600 truncate">{{ stats|capitalize }}</p>
-                                        <p class="text-md text-gray-800 truncate">{{ statValue }}</p>
-                                    </div>
+                        <div id="infomodal{{ pokemon.id }}" class="mt-5 hidden">
+                            <h3 class="text-xl font-semibold">Evolution</h3>
+                            <div class="flex flex-wrap justify-center mt-2">
+                                {% for evo in pokemon.apiEvolutions %}
+                                    <span class="bg-gray-200 rounded-full px-3 py-1 text-sm font-semibold text-gray-700 mr-2 mb-2">{{ evo.name }}</span>
                                 {% endfor %}
                             </div>
                         </div>
@@ -84,7 +84,7 @@
         }
 
         function hideAllSections(championId) {
-            document.getElementById('blurbmodal' + championId).classList.add('hidden');
+            // document.getElementById('blurbmodal' + championId).classList.add('hidden');
             document.getElementById('statsmodal' + championId).classList.add('hidden');
             document.getElementById('infomodal' + championId).classList.add('hidden');
         }

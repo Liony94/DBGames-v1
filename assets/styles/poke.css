@@ -3,7 +3,8 @@
 @tailwind utilities;
 
 body {
-    background: url("https://trumpwallpapers.com/wp-content/uploads/Pokemon-Wallpaper-04-4000-x-2250.jpg") no-repeat;
+    background-size: cover;
+    background: url("https://trumpwallpapers.com/wp-content/uploads/Pokemon-Wallpaper-04-4000-x-2250.jpg") no-repeat fixed;
 }
 
 h1, h2, h3 {
@@ -100,9 +101,9 @@ a {
 }
 
 .modalStyle {
-    background-color: #0A1428;
-    background-image: linear-gradient(315deg, #091428 0%, rgba(1, 152, 117, 0) 100%);
-    border: 2px solid #C89B3C;
+    background-color: #8d1837;
+    background-image: linear-gradient(315deg, rgb(166, 27, 63) 0%, rgb(140, 21, 51) 100%);
+    border: 2px solid #fbac1d;
 }
 
 .searchBar {
