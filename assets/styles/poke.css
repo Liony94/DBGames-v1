@@ -2,9 +2,15 @@
 @tailwind components;
 @tailwind utilities;
 
+::-webkit-scrollbar {
+    display: none;
+}
+
 body {
     background-size: cover;
     background: url("https://trumpwallpapers.com/wp-content/uploads/Pokemon-Wallpaper-04-4000-x-2250.jpg") no-repeat fixed;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
 h1, h2, h3 {

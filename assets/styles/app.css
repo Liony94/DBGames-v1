@@ -2,9 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-/*body {*/
-/*    background-color: #091428;*/
-/*}*/
+::-webkit-scrollbar {
+    display: none;
+}
+
+body {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
 
 h1, h2 {
     color: #7a515f;
