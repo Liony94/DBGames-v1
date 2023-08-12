@@ -14,6 +14,7 @@
             </svg>
         </div>
     </section>
+
     <section class="relative py-16 bg-blueGray-200">
         <div class="container mx-auto px-4">
             <div class="relative flex flex-col min-w-0 break-words bg-white w-full mb-6 shadow-xl rounded-lg -mt-64">
@@ -45,6 +46,7 @@
                             </div>
                         </div>
                     </div>
+
                     <div class="text-center mt-12">
                         <div id="usernameContainer">
                             <div class="username-display cursor-pointer">
@@ -62,17 +64,44 @@
                                 {{ form_end(formUser) }}
                             </div>
                         </div>
-                        <div class="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
-                            <i class="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
-                            {{ app.user.city }}
+
+                        <div id="cityContainer">
+                            <div class="city-display cursor-pointer">
+                                <div class="text-sm leading-normal mt-0 mb-2 text-blueGray-400 font-bold uppercase">
+                                    <i class="fas fa-map-marker-alt mr-2 text-lg text-blueGray-400"></i>
+                                    {{ app.user.city }}
+                                    <i class="fas fa-pencil-alt text-blueGray-500 cursor-pointer ml-2" id="editCity"></i>
+                                </div>
+                            </div>
+                            <div class="city-edit hidden">
+                                {{ form_start(formCity) }}
+                                {{ form_widget(formCity.city) }}
+                                <button type="submit" class="firstButton text-white font-bold py-2 px-4 rounded">
+                                    Sauvegarder
+                                </button>
+                                {{ form_end(formCity) }}
+                            </div>
                         </div>
-                        <div class="mb-2 text-blueGray-600 mt-10">
-                            <i class="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
-                            {% for game in app.user.myGames %}
-                                {{ game.name }}
-                                {% if not loop.last %}, {% endif %}
-                            {% endfor %}
+
+                        <div id="gamesContainer">
+                            <div class="games-display">
+                                <i class="fas fa-briefcase mr-2 text-lg text-blueGray-400"></i>
+                                {% for game in app.user.myGames %}
+                                    {{ game.name }}
+                                    {% if not loop.last %}, {% endif %}
+                                {% endfor %}
+                                <i class="fas fa-plus text-blueGray-500 cursor-pointer ml-2" id="editGames"></i>
+                            </div>
+                            <div class="games-edit hidden">
+                                {{ form_start(formGames) }}
+                                {{ form_widget(formGames.myGames) }}
+                                <button type="submit" class="firstButton text-white font-bold py-2 px-4 rounded">
+                                    Sauvegarder
+                                </button>
+                                {{ form_end(formGames) }}
+                            </div>
                         </div>
+
                     </div>
                     <div class="mt-10 py-10 border-t border-blueGray-200 text-center">
                         <div class="flex flex-wrap justify-center">
@@ -105,12 +134,14 @@
 
 <script>
     $(document).ready(function() {
-        handleEdit('.username-display', '.username-edit', '#usernameContainer', '#user_profile');
-        handleEdit('.description-display', '.description-edit', '#descriptionContainer', '#description_profile');
+        handleEdit('#editUsername', '.username-display', '.username-edit', '#usernameContainer', '#user_profile');
+        handleEdit('#editDescription', '.description-display', '.description-edit', '#descriptionContainer', '#description_profile');
+        handleEdit('#editGames', '.games-display', '.games-edit', '#gamesContainer', '#user_games_profile');
+        handleEdit('#editCity', '.city-display', '.city-edit', '#cityContainer', '#city_profile')
 
-        function handleEdit(displaySelector, editSelector, containerId, formId) {
-            $(displaySelector).on('click', function() {
-                $(this).addClass('hidden');
+        function handleEdit(triggerSelector, displaySelector, editSelector, containerId, formId) {
+            $(triggerSelector).on('click', function() {
+                $(displaySelector).addClass('hidden');
                 $(editSelector).removeClass('hidden');
             });
 
@@ -137,6 +168,9 @@
             }
             if (!$(event.target).closest('#descriptionContainer').length) {
                 cancelEdit('.description-edit', '.description-display');
+            }
+            if (!$(event.target).closest('#gamesContainer').length) {
+                cancelEdit('.games-edit', '.games-display');
             }
         });
 
