@@ -52,9 +52,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Games::class, inversedBy: 'users')]
     private Collection $myGames;
 
+    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'users')]
+    private Collection $friends;
+
+    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'friends')]
+    private Collection $users;
+
     public function __construct()
     {
         $this->myGames = new ArrayCollection();
+        $this->friends = new ArrayCollection();
+        $this->users = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -218,6 +226,57 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function removeMyGame(Games $myGame): static
     {
         $this->myGames->removeElement($myGame);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getFriends(): Collection
+    {
+        return $this->friends;
+    }
+
+    public function addFriend(self $friend): static
+    {
+        if (!$this->friends->contains($friend)) {
+            $this->friends->add($friend);
+        }
+
+        return $this;
+    }
+
+    public function removeFriend(self $friend): static
+    {
+        $this->friends->removeElement($friend);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, self>
+     */
+    public function getUsers(): Collection
+    {
+        return $this->users;
+    }
+
+    public function addUser(self $user): static
+    {
+        if (!$this->users->contains($user)) {
+            $this->users->add($user);
+            $user->addFriend($this);
+        }
+
+        return $this;
+    }
+
+    public function removeUser(self $user): static
+    {
+        if ($this->users->removeElement($user)) {
+            $user->removeFriend($this);
+        }
 
         return $this;
     }
