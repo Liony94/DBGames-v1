@@ -115,3 +115,46 @@ a {
 .searchBar {
     box-shadow: 0 5px 8px rgb(200, 155, 60, 100);
 }
+
+.notification-dot {
+    position: relative;
+}
+
+.notification-dot::after {
+    content: "";
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 8px;
+    height: 8px;
+    background-color: red;
+    border-radius: 50%;
+}
+
+.notification-icon {
+    margin-top: -10px;
+    margin-right: -70px;
+}
+
+.notification-indicator {
+    position: absolute;
+    top: 0;
+    right: 0;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    background-color: red;
+    color: white;
+    font-size: 8px;
+    line-height: 12px;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+#dropdown-menu-notification {
+    right: 0;
+    z-index: 1000;
+}

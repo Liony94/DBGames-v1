@@ -19,10 +19,9 @@
         {% endblock %}
     </head>
     <header>
-        {% block header %}
-        {{ include('partials/header.html.twig') }}
-        {% endblock %}
+        {{ render(controller('App\\Controller\\HeaderController::renderHeader')) }}
     </header>
+
     <body>
         {% block body %}{% endblock %}
     </body>

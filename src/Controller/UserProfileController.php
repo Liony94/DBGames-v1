@@ -27,6 +27,14 @@ class UserProfileController extends AbstractController
 
         $numberOfFriends = count($user->getFriends());
 
+        $receivedFriendRequests = $user->getReceivedFriendRequests();
+        $unreadRequestsCount = 0;
+        foreach ($receivedFriendRequests as $friendRequest) {
+            if (!$friendRequest->getAccepted()) {
+                $unreadRequestsCount++;
+            }
+        }
+
         $formUser = $this->createForm(UsernameProfileType::class, $user);
         $formDescription = $this->createForm(UserDescriptionProfileType::class, $user);
         $formGames = $this->createForm(UserGamesProfileType::class, $user);
@@ -41,7 +49,8 @@ class UserProfileController extends AbstractController
             'formDescription' => $formDescription->createView(),
             'formCity' => $formCity->createView(),
             'formGames' => $formGames->createView(),
-            'numberOfFriends' => $numberOfFriends
+            'numberOfFriends' => $numberOfFriends,
+            'unreadRequestsCount' => $unreadRequestsCount
         ]);
     }
 

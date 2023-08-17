@@ -26,4 +26,17 @@ document.addEventListener('DOMContentLoaded', function() {
             menu.classList.add('hidden');
         });
     });
+
+    document.getElementById('notification-icon').addEventListener('click', function(event) {
+        var dropdown = document.getElementById('dropdown-menu-notification');
+        dropdown.classList.toggle('hidden');
+        event.stopPropagation();
+    });
+
+    document.addEventListener('click', function() {
+        var dropdown = document.getElementById('dropdown-menu-notification');
+        if (!dropdown.classList.contains('hidden')) {
+            dropdown.classList.add('hidden');
+        }
+    });
 });

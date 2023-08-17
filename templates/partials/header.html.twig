@@ -1,4 +1,6 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/alpinejs/3.8.1/cdn.min.js" defer></script>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+
 <header class="text-gray-600 body-font">
     <div class="container mx-auto flex flex-wrap p-5 flex-col md:flex-row items-center">
         <div class="flex flex-col items-center justify-center mt-32" x-cloak x-data="appData()" x-init="appInit()">
@@ -12,7 +14,7 @@
 {#        </a>#}
         <nav class="md:ml-auto md:mr-auto flex flex-wrap items-center text-base justify-center">
             <a href="{{ path('app_home') }}" class="headerNav mr-5 cursor-pointer ">Accueil</a>
-            <a href="{{ path('app_user_friends_search') }}" class="headerNav mr-5 cursor-pointer">Utilisateurs</a>
+            <a href="{{ path('app_user_friends_search') }}" class="headerNav mr-5 cursor-pointer">Trouves des amis</a>
             <a href="#" class="headerNav mr-5 cursor-pointer">Nous contacter</a>
             <div class="relative inline-block text-left">
                 <a class="headerNav mr-5 cursor-pointer dropdown-button">Jeux..</a>
@@ -24,6 +26,19 @@
                     </div>
                 </div>
             </div>
+            <div class="relative inline-block text-left">
+                <button id="notification-icon" class="firstButton notification-icon inline-flex items-center border-0 py-2 px-5 focus:outline-none rounded text-base text-white mt-4 hover:bg-opacity-80 relative">
+                    <i class="fas fa-bell"></i>
+                    {% if unreadRequestsCount > 0 %}
+                        <div class="notification-indicator">{{ unreadRequestsCount }}</div>
+                    {% endif %}
+                </button>
+                {% if unreadRequestsCount > 0 %}
+                    <div id="dropdown-menu-notification" class="dropdown-menu-notification hidden absolute mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none">
+                        <a href="{{ path('app_user_friends_requests') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Vous avez une nouvelle demande d'amis</a>
+                    </div>
+                {% endif %}
+            </div>
         </nav>
         {%- if is_granted('ROLE_USER') -%}
             <div class="relative inline-block text-left">
@@ -33,7 +48,7 @@
                 <div class="navBarButtonDropdown origin-top-right absolute right-0 mt-2 w-56 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5 focus:outline-none z-10 hidden">
                     <div class="py-1">
                         <a href="{{ path('app_user_profile') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Mon Profil</a>
-                        <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Amis</a>
+                        <a href="{{ path('app_user_friends_list') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Amis</a>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Messages</a>
                         <a href="#" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">Réglages</a>
                         <a href="{{ path('app_logout') }}" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 flex items-center">
@@ -67,5 +82,17 @@
                 },
             };
         };
+        document.getElementById('notification-icon').addEventListener('click', function(event) {
+            var dropdown = document.getElementById('dropdown-menu-notification');
+            dropdown.classList.toggle('hidden');
+            event.stopPropagation();
+        });
+
+        document.addEventListener('click', function() {
+            var dropdown = document.getElementById('dropdown-menu-notification');
+            if (!dropdown.classList.contains('hidden')) {
+                dropdown.classList.add('hidden');
+            }
+        });
     </script>
 </header>
