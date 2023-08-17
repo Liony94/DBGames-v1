@@ -7,6 +7,7 @@ use App\Form\RegistrationFormType;
 use App\Security\UserAuthenticator;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -29,6 +30,10 @@ class RegistrationController extends AbstractController
                     $form->get('plainPassword')->getData()
                 )
             );
+
+            $name = $user->getUsername();
+            $avatarUrl = "https://avatars.dicebear.com/api/human/$name.svg";
+            $user->setProfileImage($avatarUrl);
 
             $entityManager->persist($user);
             $entityManager->flush();

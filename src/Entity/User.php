@@ -49,12 +49,23 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profileImage = null;
+
     #[ORM\ManyToMany(targetEntity: Games::class, inversedBy: 'users')]
     private Collection $myGames;
+
+    #[ORM\OneToMany(targetEntity: FriendRequest::class, mappedBy: 'sender')]
+    private Collection $sentFriendRequests;
+
+    #[ORM\OneToMany(targetEntity: FriendRequest::class, mappedBy: 'receiver')]
+    private Collection $receivedFriendRequests;
 
     public function __construct()
     {
         $this->myGames = new ArrayCollection();
+        $this->sentFriendRequests = new ArrayCollection();
+        $this->receivedFriendRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -220,5 +231,70 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->myGames->removeElement($myGame);
 
         return $this;
+    }
+
+    public function getFriends(): Collection
+    {
+        $friends = new ArrayCollection();
+
+        foreach ($this->receivedFriendRequests as $friendRequest) {
+            if ($friendRequest->getAccepted()) {
+                $friends->add($friendRequest->getSender());
+            }
+        }
+
+        foreach ($this->sentFriendRequests as $friendRequest) {
+            if ($friendRequest->getAccepted()) {
+                $friends->add($friendRequest->getReceiver());
+            }
+        }
+
+        return $friends;
+    }
+
+    public function getProfileImage(): ?string
+    {
+        return $this->profileImage;
+    }
+
+    public function setProfileImage(?string $profileImage): static
+    {
+        $this->profileImage = $profileImage;
+
+        return $this;
+    }
+
+    public function acceptFriendRequest(FriendRequest $friendRequest): static
+    {
+        if ($this === $friendRequest->getReceiver()) {
+            $friendRequest->setAccepted(true);
+        }
+
+        return $this;
+    }
+
+    public function rejectFriendRequest(FriendRequest $friendRequest): static
+    {
+        if ($this === $friendRequest->getReceiver()) {
+            $this->receivedFriendRequests->removeElement($friendRequest);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FriendRequest>
+     */
+    public function getSentFriendRequests(): Collection
+    {
+        return $this->sentFriendRequests;
+    }
+
+    /**
+     * @return Collection<int, FriendRequest>
+     */
+    public function getReceivedFriendRequests(): Collection
+    {
+        return $this->receivedFriendRequests;
     }
 }
