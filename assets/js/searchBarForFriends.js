@@ -33,7 +33,7 @@ function displayUsers(users) {
             card.className = 'w-full bg-white rounded-lg p-12 flex flex-col justify-center items-center';
             card.innerHTML = `
                 <div class="mb-8">
-                    <img class="object-center object-cover rounded-full h-36 w-36" src="https://cdn-icons-png.flaticon.com/256/206/206853.png" alt="photo">
+                    <img class="object-center object-cover rounded-full h-36 w-36" src="${user.image}" alt="photo">
                 </div>
                 <div class="text-center">
                     <p class="text-xl text-gray-700 font-bold mb-2">${user.username}</p>

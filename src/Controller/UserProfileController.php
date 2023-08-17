@@ -33,22 +33,12 @@ class UserProfileController extends AbstractController
             return $this->redirectToRoute('app_user_profile');
         }
 
-        $avatarUrl = $this->getAvatarUrl($user->getUsername());
-
         return $this->render('user_profile/profile.html.twig', [
             'formUser' => $formUser->createView(),
             'formDescription' => $formDescription->createView(),
             'formCity' => $formCity->createView(),
             'formGames' => $formGames->createView(),
-            'avatarUrl' => $avatarUrl,
         ]);
-    }
-
-    #[Route('/api/avatar/{username}', name: 'api_avatar', methods: ["GET"])]
-    public function apiAvatar(string $username): JsonResponse
-    {
-        $avatarUrl = $this->getAvatarUrl($username);
-        return new JsonResponse(['avatarUrl' => $avatarUrl]);
     }
 
     private function redirectToLogin(): Response
@@ -71,10 +61,5 @@ class UserProfileController extends AbstractController
             return true;
         }
         return false;
-    }
-
-    private function getAvatarUrl(string $username): string
-    {
-        return "https://avatars.dicebear.com/api/human/$username.svg";
     }
 }

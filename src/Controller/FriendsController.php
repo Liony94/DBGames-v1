@@ -77,7 +77,8 @@ class FriendsController extends AbstractController
         foreach ($users as $user) {
             $usersData[] = [
                 'id' => $user->getId(),
-                'username' => $user->getUsername()
+                'username' => $user->getUsername(),
+                'image' => $user->getProfileImage(),
             ];
         }
 

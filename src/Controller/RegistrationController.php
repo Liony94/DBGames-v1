@@ -31,6 +31,10 @@ class RegistrationController extends AbstractController
                 )
             );
 
+            $name = $user->getUsername();
+            $avatarUrl = "https://avatars.dicebear.com/api/human/$name.svg";
+            $user->setProfileImage($avatarUrl);
+
             $entityManager->persist($user);
             $entityManager->flush();
 
@@ -45,27 +49,4 @@ class RegistrationController extends AbstractController
             'registrationForm' => $form->createView(),
         ]);
     }
-
-    // same class but return json response
-//    #[Route('/register', name: 'app_register', methods: ['POST'])]
-//    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): JsonResponse
-//    {
-//        $data = json_decode($request->getContent(), true);
-//
-//        if (!isset($data['username'], $data['password'], $data['email'], $data['city'], $data['description'])) {
-//            return new JsonResponse(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST);
-//        }
-//
-//        $user = new User();
-//        $user->setUsername($data['username']);
-//        $user->setEmail($data['email']);
-//        $user->setCity($data['city']);
-//        $user->setDescription($data['description']);
-//        $user->setPassword($userPasswordHasher->hashPassword($user, $data['password']));
-//
-//        $entityManager->persist($user);
-//        $entityManager->flush();
-//
-//        return new JsonResponse(['message' => 'User registered successfully'], Response::HTTP_CREATED);
-//    }
 }
