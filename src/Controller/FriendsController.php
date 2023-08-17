@@ -2,9 +2,11 @@
 
 namespace App\Controller;
 
+use App\Entity\FriendRequest;
+use App\Repository\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
-use App\Repository\UserRepository;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
@@ -19,10 +21,10 @@ class FriendsController extends AbstractController
         }
 
         $user = $this->getUser();
-        $friends = $user->getFriends();
+        $receivedFriendRequests = $user->getReceivedFriendRequests();
 
         return $this->render('friends/friends.html.twig', [
-            'friends' => $friends,
+            'receivedFriendRequests' => $receivedFriendRequests,
         ]);
     }
 
@@ -38,20 +40,23 @@ class FriendsController extends AbstractController
             throw new \InvalidArgumentException('Vous ne pouvez pas vous ajouter vous-même comme ami.');
         }
 
-        $friend = $userRepository->findOneBy(['username' => $username]);
-        if (!$friend) {
+        $receiver = $userRepository->findOneBy(['username' => $username]);
+        if (!$receiver) {
             throw $this->createNotFoundException('L\'utilisateur demandé n\'existe pas.');
         }
 
-        $user->addFriend($friend);
-        $entityManager->persist($user);
+        $friendRequest = new FriendRequest();
+        $friendRequest->setSender($user);
+        $friendRequest->setReceiver($receiver);
+
+        $entityManager->persist($friendRequest);
         $entityManager->flush();
 
         return new Response('Demande d\'ami envoyée avec succès.');
     }
 
     #[Route(path: '/user/search', name: 'app_user_search', methods: ['GET'])]
-    public function searchUsers(Request $request, UserRepository $userRepository): Response
+    public function searchUsers(Request $request, UserRepository $userRepository): JsonResponse
     {
         $query = $request->query->get('query');
         $users = $userRepository->searchUsersByName($query);
@@ -65,5 +70,38 @@ class FriendsController extends AbstractController
         }
 
         return $this->json($usersData);
+    }
+
+    #[Route(path: '/user/friends/requests', name: 'app_user_friends_requests', methods: ['GET'])]
+    public function displayFriendRequests(): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $user = $this->getUser();
+        $receivedFriendRequests = $user->getReceivedFriendRequests();
+
+        return $this->render('friends/friendsRequest.html.twig', [
+            'receivedFriendRequests' => $receivedFriendRequests,
+        ]);
+    }
+
+    #[Route(path: '/user/friends/requests/{id}/accept', name: 'app_user_friends_requests_accept', methods: ['POST'])]
+    public function acceptFriendRequest(EntityManagerInterface $entityManager, int $id): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $friendRequest = $entityManager->getRepository(FriendRequest::class)->find($id);
+        if (!$friendRequest) {
+            throw $this->createNotFoundException('La demande d\'ami n\'existe pas.');
+        }
+
+        $friendRequest->setAccepted(true);
+        $entityManager->flush();
+
+        return new Response('Demande d\'ami acceptée avec succès.');
     }
 }

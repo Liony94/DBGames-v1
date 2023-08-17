@@ -52,17 +52,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Games::class, inversedBy: 'users')]
     private Collection $myGames;
 
-    #[ORM\ManyToMany(targetEntity: self::class, inversedBy: 'users')]
-    private Collection $friends;
+    #[ORM\OneToMany(targetEntity: FriendRequest::class, mappedBy: 'sender')]
+    private Collection $sentFriendRequests;
 
-    #[ORM\ManyToMany(targetEntity: self::class, mappedBy: 'friends')]
-    private Collection $users;
+    #[ORM\OneToMany(targetEntity: FriendRequest::class, mappedBy: 'receiver')]
+    private Collection $receivedFriendRequests;
 
     public function __construct()
     {
         $this->myGames = new ArrayCollection();
-        $this->friends = new ArrayCollection();
-        $this->users = new ArrayCollection();
+        $this->sentFriendRequests = new ArrayCollection();
+        $this->receivedFriendRequests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -238,46 +238,37 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this->friends;
     }
 
-    public function addFriend(self $friend): static
+    public function acceptFriendRequest(FriendRequest $friendRequest): static
     {
-        if (!$this->friends->contains($friend)) {
-            $this->friends->add($friend);
+        if ($this === $friendRequest->getReceiver()) {
+            $friendRequest->setAccepted(true);
         }
 
         return $this;
     }
 
-    public function removeFriend(self $friend): static
+    public function rejectFriendRequest(FriendRequest $friendRequest): static
     {
-        $this->friends->removeElement($friend);
+        if ($this === $friendRequest->getReceiver()) {
+            $this->receivedFriendRequests->removeElement($friendRequest);
+        }
 
         return $this;
     }
 
     /**
-     * @return Collection<int, self>
+     * @return Collection<int, FriendRequest>
      */
-    public function getUsers(): Collection
+    public function getSentFriendRequests(): Collection
     {
-        return $this->users;
+        return $this->sentFriendRequests;
     }
 
-    public function addUser(self $user): static
+    /**
+     * @return Collection<int, FriendRequest>
+     */
+    public function getReceivedFriendRequests(): Collection
     {
-        if (!$this->users->contains($user)) {
-            $this->users->add($user);
-            $user->addFriend($this);
-        }
-
-        return $this;
-    }
-
-    public function removeUser(self $user): static
-    {
-        if ($this->users->removeElement($user)) {
-            $user->removeFriend($this);
-        }
-
-        return $this;
+        return $this->receivedFriendRequests;
     }
 }

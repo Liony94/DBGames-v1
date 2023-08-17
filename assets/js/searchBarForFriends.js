@@ -42,22 +42,18 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 
 function sendFriendRequest(username) {
-    // Construct the URL for sending the friend request
     const url = `/user/friends/${username}`;
 
-    // Perform the fetch request
     fetch(url, {
         method: 'POST',
         headers: {
-            'X-Requested-With': 'XMLHttpRequest' // Add this header for Symfony's XMLHttpRequest detection
+            'X-Requested-With': 'XMLHttpRequest'
         }
     })
         .then(response => response.text())
         .then(message => {
-            // Handle the response message as needed
-            console.log(message); // For example, you can log the response
+            console.log(message);
 
-            // Update the button text to "Demande envoyée"
             const forms = document.querySelectorAll('.add-friend-form');
             forms.forEach(form => {
                 if (form.getAttribute('data-username') === username) {
@@ -67,17 +63,13 @@ function sendFriendRequest(username) {
                 }
             });
 
-            // Show the flash message with animation
             const flashMessage = document.querySelector('.flash-message');
             flashMessage.classList.add('show');
             setTimeout(() => {
                 flashMessage.classList.remove('show');
-            }, 3000); // Hide the message after 3 seconds
+            }, 3000);
         })
         .catch(error => {
             console.error('Error sending friend request:', error);
         });
 }
-
-
-

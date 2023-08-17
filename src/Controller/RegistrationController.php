@@ -16,56 +16,56 @@ use Symfony\Component\Security\Http\Authentication\UserAuthenticatorInterface;
 
 class RegistrationController extends AbstractController
 {
-//    #[Route('/register', name: 'app_register')]
-//    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
-//    {
-//        $user = new User();
-//        $form = $this->createForm(RegistrationFormType::class, $user);
-//        $form->handleRequest($request);
-//
-//        if ($form->isSubmitted() && $form->isValid()) {
-//            $user->setPassword(
-//                $userPasswordHasher->hashPassword(
-//                    $user,
-//                    $form->get('plainPassword')->getData()
-//                )
-//            );
-//
-//            $entityManager->persist($user);
-//            $entityManager->flush();
-//
-//            return $userAuthenticator->authenticateUser(
-//                $user,
-//                $authenticator,
-//                $request
-//            );
-//        }
-//
-//        return $this->render('registration/register.html.twig', [
-//            'registrationForm' => $form->createView(),
-//        ]);
-//    }
-
-    // same class but return json response
-    #[Route('/register', name: 'app_register', methods: ['POST'])]
-    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): JsonResponse
+    #[Route('/register', name: 'app_register')]
+    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): Response
     {
-        $data = json_decode($request->getContent(), true);
+        $user = new User();
+        $form = $this->createForm(RegistrationFormType::class, $user);
+        $form->handleRequest($request);
 
-        if (!isset($data['username'], $data['password'], $data['email'], $data['city'], $data['description'])) {
-            return new JsonResponse(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST);
+        if ($form->isSubmitted() && $form->isValid()) {
+            $user->setPassword(
+                $userPasswordHasher->hashPassword(
+                    $user,
+                    $form->get('plainPassword')->getData()
+                )
+            );
+
+            $entityManager->persist($user);
+            $entityManager->flush();
+
+            return $userAuthenticator->authenticateUser(
+                $user,
+                $authenticator,
+                $request
+            );
         }
 
-        $user = new User();
-        $user->setUsername($data['username']);
-        $user->setEmail($data['email']);
-        $user->setCity($data['city']);
-        $user->setDescription($data['description']);
-        $user->setPassword($userPasswordHasher->hashPassword($user, $data['password']));
-
-        $entityManager->persist($user);
-        $entityManager->flush();
-
-        return new JsonResponse(['message' => 'User registered successfully'], Response::HTTP_CREATED);
+        return $this->render('registration/register.html.twig', [
+            'registrationForm' => $form->createView(),
+        ]);
     }
+
+    // same class but return json response
+//    #[Route('/register', name: 'app_register', methods: ['POST'])]
+//    public function register(Request $request, UserPasswordHasherInterface $userPasswordHasher, UserAuthenticatorInterface $userAuthenticator, UserAuthenticator $authenticator, EntityManagerInterface $entityManager): JsonResponse
+//    {
+//        $data = json_decode($request->getContent(), true);
+//
+//        if (!isset($data['username'], $data['password'], $data['email'], $data['city'], $data['description'])) {
+//            return new JsonResponse(['error' => 'Invalid data'], Response::HTTP_BAD_REQUEST);
+//        }
+//
+//        $user = new User();
+//        $user->setUsername($data['username']);
+//        $user->setEmail($data['email']);
+//        $user->setCity($data['city']);
+//        $user->setDescription($data['description']);
+//        $user->setPassword($userPasswordHasher->hashPassword($user, $data['password']));
+//
+//        $entityManager->persist($user);
+//        $entityManager->flush();
+//
+//        return new JsonResponse(['message' => 'User registered successfully'], Response::HTTP_CREATED);
+//    }
 }
