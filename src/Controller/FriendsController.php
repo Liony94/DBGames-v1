@@ -115,6 +115,6 @@ class FriendsController extends AbstractController
         $friendRequest->setAccepted(true);
         $entityManager->flush();
 
-        return new Response('Demande d\'ami acceptée avec succès.');
+        return $this->redirectToRoute('app_user_friends_list');
     }
 }

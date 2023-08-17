@@ -30,7 +30,7 @@ function displayUsers(users) {
 
         users.forEach(user => {
             const card = document.createElement('div');
-            card.className = 'w-full bg-white rounded-lg p-12 flex flex-col justify-center items-center';
+            card.className = 'w-full bg-white rounded-lg p-12 flex flex-col justify-center items-center transition-transform transform hover:-translate-y-1 hover:scale-105 shadow-lg hover:shadow-xl';
             card.innerHTML = `
                 <div class="mb-8">
                     <img class="object-center object-cover rounded-full h-36 w-36" src="${user.image}" alt="photo">

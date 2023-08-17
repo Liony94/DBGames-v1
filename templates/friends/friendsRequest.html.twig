@@ -7,17 +7,22 @@
                 Demandes d'amis
             </h2>
         </div>
-        <ul class="list-disc pl-5">
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {% for friendRequest in receivedFriendRequests %}
-                <li class="mb-2">
-                    {{ friendRequest.sender.getUsername() }}
-                    <form action="{{ path('app_user_friends_requests_accept', { 'id': friendRequest.id }) }}" method="post">
-                        <button type="submit" class="text-indigo-600 text-sm font-semibold">
-                            Accepter la demande
-                        </button>
-                    </form>
-                </li>
+                <div class="w-full bg-white rounded-lg p-12 flex flex-col justify-center items-center transition-transform transform hover:-translate-y-1 hover:scale-105 shadow-lg hover:shadow-xl">
+                    <div class="mb-8">
+                        <img class="object-center object-cover rounded-full h-36 w-36" src="{{ friendRequest.sender.getProfileImage() }}" alt="photo">
+                    </div>
+                    <div class="text-center">
+                        <p class="text-xl text-gray-700 font-bold mb-2">{{ friendRequest.sender.getUsername() }}</p>
+                        <form action="{{ path('app_user_friends_requests_accept', { 'id': friendRequest.id }) }}" method="post">
+                            <button type="submit" class="text-indigo-600 text-sm font-semibold">
+                                Accepter la demande
+                            </button>
+                        </form>
+                    </div>
+                </div>
             {% endfor %}
-        </ul>
+        </div>
     </section>
 {% endblock %}
