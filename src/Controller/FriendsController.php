@@ -74,12 +74,27 @@ class FriendsController extends AbstractController
         $users = $userRepository->searchUsersByName($query);
         $usersData = [];
 
+        $currentUser = $this->getUser();
+        $friends = $currentUser->getFriends();
+        $sentFriendRequests = $currentUser->getSentFriendRequests();
+
         foreach ($users as $user) {
-            $usersData[] = [
-                'id' => $user->getId(),
-                'username' => $user->getUsername(),
-                'image' => $user->getProfileImage(),
-            ];
+            if ($user->getId() !== $currentUser->getId() &&
+                !$friends->contains($user) &&
+                !$sentFriendRequests->exists(function($key, $element) use ($user) {
+                    return $element->getReceiver() === $user;
+                })) {
+                $games = [];
+                foreach ($user->getMyGames() as $game) {
+                    $games[] = $game->getName();
+                }
+                $usersData[] = [
+                    'id' => $user->getId(),
+                    'username' => $user->getUsername(),
+                    'image' => $user->getProfileImage(),
+                    'games' => $games,
+                ];
+            }
         }
 
         return $this->json($usersData);
