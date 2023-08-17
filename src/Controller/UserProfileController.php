@@ -44,6 +44,13 @@ class UserProfileController extends AbstractController
         ]);
     }
 
+    #[Route('/api/avatar/{username}', name: 'api_avatar', methods: ["GET"])]
+    public function apiAvatar(string $username): JsonResponse
+    {
+        $avatarUrl = $this->getAvatarUrl($username);
+        return new JsonResponse(['avatarUrl' => $avatarUrl]);
+    }
+
     private function redirectToLogin(): Response
     {
         return $this->redirectToRoute('app_login');

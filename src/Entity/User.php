@@ -49,6 +49,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $description = null;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $profileImage = null;
+
     #[ORM\ManyToMany(targetEntity: Games::class, inversedBy: 'users')]
     private Collection $myGames;
 
@@ -230,12 +233,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         return $this;
     }
 
-    /**
-     * @return Collection<int, self>
-     */
     public function getFriends(): Collection
     {
-        return $this->friends;
+        $friends = new ArrayCollection();
+
+        foreach ($this->receivedFriendRequests as $friendRequest) {
+            if ($friendRequest->getAccepted()) {
+                $friends->add($friendRequest->getSender());
+            }
+        }
+
+        foreach ($this->sentFriendRequests as $friendRequest) {
+            if ($friendRequest->getAccepted()) {
+                $friends->add($friendRequest->getReceiver());
+            }
+        }
+
+        return $friends;
+    }
+
+    public function getProfileImage(): ?string
+    {
+        return $this->profileImage;
+    }
+
+    public function setProfileImage(?string $profileImage): static
+    {
+        $this->profileImage = $profileImage;
+
+        return $this;
     }
 
     public function acceptFriendRequest(FriendRequest $friendRequest): static

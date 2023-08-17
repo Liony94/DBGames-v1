@@ -13,7 +13,7 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class FriendsController extends AbstractController
 {
-    #[Route(path: '/user/friends', name: 'app_user_friends', methods: ['GET'])]
+    #[Route(path: '/user/friends', name: 'app_user_friends_search', methods: ['GET'])]
     public function displayFriends(Request $request, UserRepository $userRepository): Response
     {
         if (!$this->getUser()) {
@@ -21,10 +21,22 @@ class FriendsController extends AbstractController
         }
 
         $user = $this->getUser();
-        $receivedFriendRequests = $user->getReceivedFriendRequests();
 
-        return $this->render('friends/friends.html.twig', [
-            'receivedFriendRequests' => $receivedFriendRequests,
+        return $this->render('friends/searchFriends.html.twig');
+    }
+
+    #[Route(path: '/user/friends/list', name: 'app_user_friends_list', methods: ['GET'])]
+    public function displayFriendsList(Request $request): Response
+    {
+        if (!$this->getUser()) {
+            return $this->redirectToRoute('app_login');
+        }
+
+        $user = $this->getUser();
+        $friends = $user->getFriends();
+
+        return $this->render('friends/friendsList.html.twig', [
+            'friends' => $friends,
         ]);
     }
 
@@ -58,7 +70,7 @@ class FriendsController extends AbstractController
     #[Route(path: '/user/search', name: 'app_user_search', methods: ['GET'])]
     public function searchUsers(Request $request, UserRepository $userRepository): JsonResponse
     {
-        $query = $request->query->get('query');
+        $query = $request->query->get('query', '');
         $users = $userRepository->searchUsersByName($query);
         $usersData = [];
 
