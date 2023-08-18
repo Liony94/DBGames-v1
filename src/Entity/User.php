@@ -52,13 +52,19 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $profileImage = null;
 
+    #[ORM\OneToMany(mappedBy: 'sender', targetEntity: Message::class)]
+    private Collection $sentMessages;
+
+    #[ORM\OneToMany(mappedBy: 'recipient', targetEntity: Message::class)]
+    private Collection $receivedMessages;
+
     #[ORM\ManyToMany(targetEntity: Games::class, inversedBy: 'users')]
     private Collection $myGames;
 
-    #[ORM\OneToMany(targetEntity: FriendRequest::class, mappedBy: 'sender')]
+    #[ORM\OneToMany(mappedBy: 'sender', targetEntity: FriendRequest::class)]
     private Collection $sentFriendRequests;
 
-    #[ORM\OneToMany(targetEntity: FriendRequest::class, mappedBy: 'receiver')]
+    #[ORM\OneToMany(mappedBy: 'receiver', targetEntity: FriendRequest::class)]
     private Collection $receivedFriendRequests;
 
     public function __construct()
@@ -66,6 +72,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->myGames = new ArrayCollection();
         $this->sentFriendRequests = new ArrayCollection();
         $this->receivedFriendRequests = new ArrayCollection();
+        $this->sentMessages = new ArrayCollection();
+        $this->receivedMessages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -296,5 +304,67 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getReceivedFriendRequests(): Collection
     {
         return $this->receivedFriendRequests;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getSentMessages(): Collection
+    {
+        return $this->sentMessages;
+    }
+
+    public function addSentMessage(Message $message): static
+    {
+        if (!$this->sentMessages->contains($message)) {
+            $this->sentMessages->add($message);
+            $message->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSentMessage(Message $message): static
+    {
+        if ($this->sentMessages->contains($message)) {
+            $this->sentMessages->removeElement($message);
+
+            if ($message->getSender() === $this) {
+                $message->setSender(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getReceivedMessages(): Collection
+    {
+        return $this->receivedMessages;
+    }
+
+    public function addReceivedMessage(Message $message): static
+    {
+        if (!$this->receivedMessages->contains($message)) {
+            $this->receivedMessages->add($message);
+            $message->setRecipient($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReceivedMessage(Message $message): static
+    {
+        if ($this->receivedMessages->contains($message)) {
+            $this->receivedMessages->removeElement($message);
+
+            if ($message->getRecipient() === $this) {
+                $message->setRecipient(null);
+            }
+        }
+
+        return $this;
     }
 }
