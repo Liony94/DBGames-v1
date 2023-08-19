@@ -67,6 +67,12 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\OneToMany(mappedBy: 'receiver', targetEntity: FriendRequest::class)]
     private Collection $receivedFriendRequests;
 
+    #[ORM\OneToMany(mappedBy: 'user1', targetEntity: Conversation::class)]
+    private Collection $conversationsAsUser1;
+
+    #[ORM\OneToMany(mappedBy: 'user2', targetEntity: Conversation::class)]
+    private Collection $conversationsAsUser2;
+
     public function __construct()
     {
         $this->myGames = new ArrayCollection();
@@ -74,6 +80,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
         $this->receivedFriendRequests = new ArrayCollection();
         $this->sentMessages = new ArrayCollection();
         $this->receivedMessages = new ArrayCollection();
+        $this->conversationsAsUser1 = new ArrayCollection();
+        $this->conversationsAsUser2 = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -362,6 +370,64 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
             if ($message->getRecipient() === $this) {
                 $message->setRecipient(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Conversation>
+     */
+    public function getConversationsAsUser1(): Collection
+    {
+        return $this->conversationsAsUser1;
+    }
+
+    public function addConversationAsUser1(Conversation $conversation): static
+    {
+        if (!$this->conversationsAsUser1->contains($conversation)) {
+            $this->conversationsAsUser1->add($conversation);
+            $conversation->setUser1($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConversationAsUser1(Conversation $conversation): static
+    {
+        if ($this->conversationsAsUser1->removeElement($conversation)) {
+            if ($conversation->getUser1() === $this) {
+                $conversation->setUser1(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Conversation>
+     */
+    public function getConversationsAsUser2(): Collection
+    {
+        return $this->conversationsAsUser2;
+    }
+
+    public function addConversationAsUser2(Conversation $conversation): static
+    {
+        if (!$this->conversationsAsUser2->contains($conversation)) {
+            $this->conversationsAsUser2->add($conversation);
+            $conversation->setUser2($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConversationAsUser2(Conversation $conversation): static
+    {
+        if ($this->conversationsAsUser2->removeElement($conversation)) {
+            if ($conversation->getUser2() === $this) {
+                $conversation->setUser2(null);
             }
         }
 

@@ -1,6 +1,9 @@
 document.addEventListener('DOMContentLoaded', function() {
     const newMessageButton = document.getElementById('newMessageButton');
     const newMessageModal = document.getElementById('newMessageModal');
+    const parentInput = document.getElementById('parent_id');
+    const recipientInput = document.getElementById('reply_recipient_id');
+    const replyForm = document.getElementById('replyForm');
 
     newMessageButton.addEventListener('click', function(event) {
         event.preventDefault();
@@ -17,7 +20,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const messageContent = document.querySelector('.message-content');
     const messageUsername = document.querySelector('.message-username');
     const messageEmail = document.querySelector('.message-email');
-    const messageTitle = document.getElementById('message-title');
+    const messageTitle = document.querySelector('.message-title');
 
     messages.forEach(function(message) {
         message.addEventListener('click', function(event) {
@@ -26,6 +29,11 @@ document.addEventListener('DOMContentLoaded', function() {
             messageUsername.textContent = event.currentTarget.getAttribute('data-username');
             messageEmail.textContent = event.currentTarget.getAttribute('data-email');
             messageTitle.textContent = event.currentTarget.getAttribute('data-title');
+
+            parentInput.value = event.currentTarget.getAttribute('data-id');
+            recipientInput.value = event.currentTarget.getAttribute('data-sender-id');
+
+            replyForm.style.display = 'block';
         });
     });
 });

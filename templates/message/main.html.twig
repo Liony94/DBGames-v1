@@ -47,13 +47,13 @@
                        placeholder="Search..." />
             </label>
             <ul class="mt-6">
-                {% for message in messages %}
-                    <li class="py-5 border-b px-3 transition hover:bg-indigo-100 message" data-content="{{ message.content }}" data-username="{{ message.sender.username }}" data-email="{{ message.sender.email }}" data-title="{{ message.title }}">
+                {% for conversation in conversations %}
+                    <li class="py-5 border-b px-3 transition hover:bg-indigo-100 conversation" data-id="{{ conversation.id }}">
                         <a href="#" class="flex justify-between items-center">
-                            <h3 class="text-lg font-semibold">{{ message.sender.username }}</h3>
-                            <p class="text-md text-gray-400">{{ message.createdAt|date('H:i') }} ago</p>
+                            <h3 class="text-lg font-semibold">{{ conversation.user1.username }} - {{ conversation.user2.username }}</h3>
+                            <p class="text-md text-gray-400">{{ conversation.createdAt|date('H:i') }} ago</p>
                         </a>
-                        <div class="text-md italic text-gray-400">{{ message.content }}</div>
+                        <div class="text-md italic text-gray-400">{{ conversation.messages[0].content }}</div>
                     </li>
                 {% endfor %}
             </ul>
@@ -117,7 +117,10 @@
                 </ul>
             </section>
             <section class="mt-6 border rounded-xl bg-gray-50 mb-3">
-                <textarea class="w-full bg-gray-50 p-2 rounded-xl" placeholder="Type your reply here..." rows="3"></textarea>
+                {{ form_start(replyForm, {'action': path('app_message'), 'method': 'post'}) }}
+                <input type="hidden" name="parent_id" id="parent_id" value="" />
+                <input type="hidden" name="reply_recipient_id" id="reply_recipient_id" value="" />
+                {{ form_widget(replyForm.content, {'attr': {'class': 'w-full bg-gray-50 p-2 rounded-xl', 'placeholder': 'Type your reply here...', 'rows': '3'}}) }}
                 <div class="flex items-center justify-between p-2">
                     <button class="h-6 w-6 text-gray-400">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
@@ -125,8 +128,9 @@
                                   d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                         </svg>
                     </button>
-                    <button class="bg-purple-600 text-white px-6 py-2 rounded-xl">Reply</button>
+                    <button class="bg-purple-600 text-white px-6 py-2 rounded-xl" type="submit">Reply</button>
                 </div>
+                {{ form_end(replyForm) }}
             </section>
         </section>
     </main>
