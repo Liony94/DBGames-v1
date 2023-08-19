@@ -17,6 +17,10 @@ class MessageType extends AbstractType
             ->add('content', TextareaType::class, [
                 'label' => 'Message',
                 'required' => true,
+            ])
+            ->add('title', TextareaType::class, [
+                'label' => 'Title',
+                'required' => true,
             ]);
     }
 

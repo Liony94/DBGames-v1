@@ -54,7 +54,6 @@
             <label class="px-3">
                 <input class="rounded-lg p-4 bg-gray-100 transition duration-200 focus:outline-none focus:ring-2 w-full" placeholder="Search..." />
             </label>
-
             <ul class="mt-6">
                 {% for conversation in conversations %}
                     <li class="py-5 border-b px-3 transition hover:bg-indigo-100">
@@ -62,6 +61,7 @@
                             <h3 class="text-lg font-semibold">{{ conversation.participants|first.username }}</h3>
                             <p class="text-md text-gray-400">{{ conversation.messages|last.sentAt|date('H:i') }} ago</p>
                         </a>
+                        <div class="text-md italic text-gray-400">{{ conversation.messages|last.title }}</div>
                         <div class="text-md italic text-gray-400">{{ conversation.messages|last.content }}</div>
                     </li>
                 {% endfor %}
@@ -180,6 +180,10 @@
                             <option value="{{ user.id }}">{{ user.username}}</option>
                         {% endfor %}
                     </select>
+                </div>
+                <div class="mb-4">
+                    <label for="title" class="text-sm font-medium text-gray-700">Titre</label>
+                    <textarea class="w-full p-3 mt-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300" id="title" name="title" rows="5" required></textarea>
                 </div>
                 <div class="mb-4">
                     <label for="message" class="text-sm font-medium text-gray-700">Message</label>

@@ -51,6 +51,7 @@ class MessageController extends AbstractController
         $message = new Message();
         $message->setSender($user);
         $message->setContent($data['message'] ?? '');
+        $message->setTitle($data['title'] ?? '');
         $message->setSentAt(new \DateTime());
 
         $conversation = new Conversation();

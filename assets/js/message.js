@@ -4,10 +4,11 @@ document.getElementById("sendButton").addEventListener("click", function(event) 
 
     const recipientId = document.getElementById("recipient").value;
     const message = document.getElementById("message").value;
+    const title = document.getElementById("title").value;
 
     fetch(`/message/send/${recipientId}`, {
         method: "POST",
-        body: JSON.stringify({ message: message }),
+        body: JSON.stringify({ message: message, title: title }),
         headers: {
             "Content-Type": "application/json"
         }
