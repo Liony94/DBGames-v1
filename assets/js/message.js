@@ -32,7 +32,6 @@ document.getElementById("sendButton").addEventListener("click", function(event) 
     })
         .then(response => response.json())
         .then(data => {
-            // Handle the response
             console.log(data);
         });
 });
