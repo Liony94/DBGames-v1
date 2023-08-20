@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", function() {
         let conversationElement = event.target.closest("li");
         if (!conversationElement) return;
 
+        let conversationId = conversationElement.getAttribute("data-conversation-id");
         let username = conversationElement.querySelector("h3").textContent;
         let title = conversationElement.querySelector(".title").textContent;
         let content = conversationElement.querySelector(".content").textContent;
@@ -35,3 +36,35 @@ document.getElementById("sendButton").addEventListener("click", function(event) 
             console.log(data);
         });
 });
+
+document.getElementById("replyButton").addEventListener("click", function(event) {
+    event.preventDefault();
+
+    const replyText = document.getElementById("replyText").value;
+    const conversationIdElement = document.getElementById("conversationId");
+
+    if (!conversationIdElement) {
+        console.error("Element with ID 'conversationId' not found");
+        return;
+    }
+
+    const conversationId = conversationIdElement.value;
+
+    if (!conversationId) {
+        console.error("No conversation ID provided");
+        return;
+    }
+
+    fetch(`/message/reply/${conversationId}`, {
+        method: "POST",
+        body: JSON.stringify({ reply: replyText }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+        });
+});
+

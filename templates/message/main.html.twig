@@ -36,7 +36,7 @@
             </label>
             <ul class="mt-6" id="conversationList">
                 {% for conversation in conversations %}
-                    <li class="py-5 border-b px-3 transition hover:bg-indigo-100">
+                    <li class="py-5 border-b px-3 transition hover:bg-indigo-100" data-conversation-id="{{ conversation.id }}">
                         <a href="#" class="flex justify-between items-center">
                             <h3 class="text-lg font-semibold">{{ conversation.participants|first.username }}</h3>
                             <p class="text-md text-gray-400">{{ conversation.messages|last.sentAt|date('H:i') }} ago</p>
@@ -119,14 +119,17 @@
                 </ul>
             </section>
             <section class="mt-6 border rounded-xl bg-gray-50 mb-3">
-                <textarea class="w-full bg-gray-50 p-2 rounded-xl" placeholder="Type your reply here..." rows="3"></textarea>
+                {% for conversation in conversations %}
+                    <input type="hidden" id="conversationId" value="{{ conversation.getId() }}" />
+                {% endfor %}
+                <textarea class="w-full bg-gray-50 p-2 rounded-xl" id="replyText" placeholder="Type your reply here..." rows="3"></textarea>
                 <div class="flex items-center justify-between p-2">
                     <button class="h-6 w-6 text-gray-400">
                         <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                         </svg>
                     </button>
-                    <button class="bg-purple-600 text-white px-6 py-2 rounded-xl">Reply</button>
+                    <button id="replyButton" class="bg-purple-600 text-white px-6 py-2 rounded-xl">Reply</button>
                 </div>
             </section>
         </section>
