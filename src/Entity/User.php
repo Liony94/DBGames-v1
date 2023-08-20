@@ -55,17 +55,28 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\ManyToMany(targetEntity: Games::class, inversedBy: 'users')]
     private Collection $myGames;
 
-    #[ORM\OneToMany(targetEntity: FriendRequest::class, mappedBy: 'sender')]
+    #[ORM\OneToMany(mappedBy: 'sender', targetEntity: FriendRequest::class)]
     private Collection $sentFriendRequests;
 
-    #[ORM\OneToMany(targetEntity: FriendRequest::class, mappedBy: 'receiver')]
+    #[ORM\OneToMany(mappedBy: 'receiver', targetEntity: FriendRequest::class)]
     private Collection $receivedFriendRequests;
+
+    #[ORM\ManyToMany(targetEntity: Conversation::class, inversedBy: 'participants')]
+    #[ORM\JoinTable(name: 'user_conversation')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id')]
+    #[ORM\InverseJoinColumn(name: 'conversation_id', referencedColumnName: 'id')]
+    private Collection $conversations;
+
+    #[ORM\OneToMany(mappedBy: 'sender', targetEntity: Message::class)]
+    private Collection $messages;
 
     public function __construct()
     {
         $this->myGames = new ArrayCollection();
         $this->sentFriendRequests = new ArrayCollection();
         $this->receivedFriendRequests = new ArrayCollection();
+        $this->conversations = new ArrayCollection();
+        $this->messages = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -296,5 +307,65 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function getReceivedFriendRequests(): Collection
     {
         return $this->receivedFriendRequests;
+    }
+
+    /**
+     * @return Collection<int, Conversation>
+     */
+    public function getConversations(): Collection
+    {
+        return $this->conversations;
+    }
+
+    public function addConversation(Conversation $conversation): static
+    {
+        if (!$this->conversations->contains($conversation)) {
+            $this->conversations->add($conversation);
+            $conversation->addParticipant($this);
+        }
+
+        return $this;
+    }
+
+    public function removeConversation(Conversation $conversation): static
+    {
+        if ($this->conversations->removeElement($conversation)) {
+            // set the owning side to null (unless already changed)
+            if ($conversation->getParticipants() === $this) {
+                $conversation->setParticipants(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Message>
+     */
+    public function getMessages(): Collection
+    {
+        return $this->messages;
+    }
+
+    public function addMessage(Message $message): static
+    {
+        if (!$this->messages->contains($message)) {
+            $this->messages->add($message);
+            $message->setSender($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMessage(Message $message): static
+    {
+        if ($this->messages->removeElement($message)) {
+            // set the owning side to null (unless already changed)
+            if ($message->getSender() === $this) {
+                $message->setSender(null);
+            }
+        }
+
+        return $this;
     }
 }
