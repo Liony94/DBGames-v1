@@ -29,6 +29,22 @@ document.addEventListener("DOMContentLoaded", function() {
                     console.error(data.message);
                 }
             });
+
+        fetch(`/message/conversation/${conversationId}/mark-as-read`, {
+            method: "POST",
+        })
+            .then(response => response.json())
+            .then(data => {
+                if (data.status === 'success') {
+                    conversationElement.classList.remove('bg-yellow-100');
+                    let unreadCountElement = conversationElement.querySelector('.text-md.bg-red-500.text-white.rounded-full.px-2.py-1.ml-2');
+                    if (unreadCountElement) {
+                        unreadCountElement.remove();
+                    }
+                } else {
+                    console.error(data.message);
+                }
+            });
     });
 
     document.getElementById("sendButton").addEventListener("click", function(event) {

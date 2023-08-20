@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Conversation;
+use App\Entity\Message;
 use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -32,6 +33,13 @@ class ConversationRepository extends ServiceEntityRepository
             ->setParameter('userId', $user->getId())
             ->orderBy('m.sentAt', 'DESC');
 
-        return $qb->getQuery()->getResult();
+        $conversations = $qb->getQuery()->getResult();
+
+        foreach ($conversations as $conversation) {
+            $unreadMessages = $this->getEntityManager()->getRepository(Message::class)->findBy(['conversation' => $conversation, 'isRead' => false]);
+            $conversation->setUnreadCount(count($unreadMessages));
+        }
+
+        return $conversations;
     }
 }

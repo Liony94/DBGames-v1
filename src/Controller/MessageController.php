@@ -37,10 +37,19 @@ class MessageController extends AbstractController
             $lastReceivedMessages[$conversation->getId()] = $messageRepository->findLastReceivedMessage($conversation, $user);
         }
 
+        $unreadConversations = [];
+        foreach ($conversations as $conversation) {
+            $unreadMessages = $messageRepository->findBy(['conversation' => $conversation, 'isRead' => false]);
+            if (count($unreadMessages) > 0) {
+                $unreadConversations[] = $conversation->getId();
+            }
+        }
+
         return $this->render('message/main.html.twig', [
             'users' => $users,
             'conversations' => $conversations,
             'lastReceivedMessages' => $lastReceivedMessages,
+            'unreadConversations' => $unreadConversations,
         ]);
     }
 
@@ -132,6 +141,27 @@ class MessageController extends AbstractController
         return new JsonResponse(['status' => 'success', 'messages' => $messagesData]);
     }
 
+    #[Route('/message/conversation/{conversationId}/mark-as-read', name: 'app_message_mark_as_read', methods: ['POST'])]
+    public function markAsRead(EntityManagerInterface $entityManager, int $conversationId): JsonResponse
+    {
+        $conversation = $entityManager->getRepository(Conversation::class)->find($conversationId);
+        if (!$conversation instanceof Conversation) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Invalid conversation']);
+        }
+
+        $user = $this->getUser();
+
+        $messages = $entityManager->getRepository(Message::class)->findBy(['conversation' => $conversation, 'isRead' => false]);
+        foreach ($messages as $message) {
+            if ($message->getSender() !== $user) {
+                $message->setIsRead(true);
+            }
+        }
+
+        $entityManager->flush();
+
+        return new JsonResponse(['status' => 'success', 'message' => 'Conversation marked as read']);
+    }
 }
 
 

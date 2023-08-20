@@ -30,9 +30,24 @@ class Message
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $title = null;
 
+    #[ORM\Column(type: Types::BOOLEAN)]
+    private bool $isRead = false;
+
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function getIsRead(): bool
+    {
+        return $this->isRead;
+    }
+
+    public function setIsRead(bool $isRead): static
+    {
+        $this->isRead = $isRead;
+
+        return $this;
     }
 
     public function getConversation(): ?Conversation

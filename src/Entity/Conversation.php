@@ -21,10 +21,25 @@ class Conversation
     #[ORM\OneToMany(mappedBy: 'conversation', targetEntity: Message::class)]
     private Collection $messages;
 
+    #[ORM\Column(type: 'integer')]
+    private int $unreadCount = 0;
+
     public function __construct()
     {
         $this->messages = new ArrayCollection();
         $this->participants = new ArrayCollection();
+    }
+
+    public function getUnreadCount(): int
+    {
+        return $this->unreadCount;
+    }
+
+    public function setUnreadCount(int $unreadCount): self
+    {
+        $this->unreadCount = $unreadCount;
+
+        return $this;
     }
 
     public function getId(): ?int
