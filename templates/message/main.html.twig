@@ -42,7 +42,6 @@
                             <p class="text-md text-gray-400">{{ conversation.messages|last.sentAt|date('H:i') }} ago</p>
                         </a>
                         <div class="title text-md italic text-gray-400">{{ conversation.messages|last.title }}</div>
-                        <div class="content text-md italic text-gray-400">{{ conversation.messages|last.content }}</div>
                     </li>
                 {% endfor %}
             </ul>

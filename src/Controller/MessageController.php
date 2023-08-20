@@ -5,7 +5,9 @@ namespace App\Controller;
 use App\Entity\Conversation;
 use App\Entity\Message;
 use App\Entity\User;
+use App\Repository\MessageRepository;
 use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\NonUniqueResultException;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,8 +16,11 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class MessageController extends AbstractController
 {
+    /**
+     * @throws NonUniqueResultException
+     */
     #[Route('/message', name: 'app_message')]
-    public function index(EntityManagerInterface $entityManager): Response
+    public function index(EntityManagerInterface $entityManager, MessageRepository $messageRepository): Response
     {
         $user = $this->getUser();
         $users = $entityManager->getRepository(User::class)->findAll();
@@ -26,9 +31,16 @@ class MessageController extends AbstractController
 
         $conversations = $entityManager->getRepository(Conversation::class)->findConversationsByUser($user);
 
+        $lastReceivedMessages = [];
+
+        foreach ($conversations as $conversation) {
+            $lastReceivedMessages[$conversation->getId()] = $messageRepository->findLastReceivedMessage($conversation, $user);
+        }
+
         return $this->render('message/main.html.twig', [
             'users' => $users,
             'conversations' => $conversations,
+            'lastReceivedMessages' => $lastReceivedMessages,
         ]);
     }
 

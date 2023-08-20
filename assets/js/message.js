@@ -7,6 +7,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (!conversationElement) return;
 
         let conversationId = conversationElement.getAttribute("data-conversation-id");
+        localStorage.setItem('lastConversationId', conversationId);
         messageDisplay.querySelector("h3").textContent = conversationElement.querySelector("h3").textContent;
 
         fetch(`/message/conversation/${conversationId}/messages`)
@@ -47,6 +48,7 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                location.reload();
             });
     });
 
@@ -78,6 +80,15 @@ document.addEventListener("DOMContentLoaded", function() {
             .then(response => response.json())
             .then(data => {
                 console.log(data);
+                location.reload();
             });
     });
+
+    let lastConversationId = localStorage.getItem('lastConversationId');
+    if (lastConversationId) {
+        let conversationElement = document.querySelector(`[data-conversation-id="${lastConversationId}"]`);
+        if (conversationElement) {
+            conversationElement.click();
+        }
+    }
 });

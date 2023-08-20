@@ -2,8 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Conversation;
 use App\Entity\Message;
+use App\Entity\User;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\NonUniqueResultException;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -21,28 +24,19 @@ class MessageRepository extends ServiceEntityRepository
         parent::__construct($registry, Message::class);
     }
 
-//    /**
-//     * @return Message[] Returns an array of Message objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('m.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    /**
+     * @throws NonUniqueResultException
+     */
+    public function findLastReceivedMessage(Conversation $conversation, User $user)
+    {
+        $qb = $this->createQueryBuilder('m');
+        $qb->where('m.conversation = :conversation')
+            ->andWhere('m.sender != :user')
+            ->setParameter('conversation', $conversation)
+            ->setParameter('user', $user)
+            ->orderBy('m.sentAt', 'DESC')
+            ->setMaxResults(1);
 
-//    public function findOneBySomeField($value): ?Message
-//    {
-//        return $this->createQueryBuilder('m')
-//            ->andWhere('m.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+        return $qb->getQuery()->getOneOrNullResult();
+    }
 }

@@ -26,8 +26,11 @@ class ConversationRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('c');
         $qb->innerJoin('c.participants', 'p')
+            ->leftJoin('c.messages', 'm')
+            ->addSelect('m')
             ->where('p.id = :userId')
-            ->setParameter('userId', $user->getId());
+            ->setParameter('userId', $user->getId())
+            ->orderBy('m.sentAt', 'DESC');
 
         return $qb->getQuery()->getResult();
     }
