@@ -97,6 +97,29 @@ class MessageController extends AbstractController
 
         return new JsonResponse(['status' => 'success', 'message' => 'Reply sent successfully']);
     }
+
+    #[Route('/message/conversation/{conversationId}/messages', name: 'app_message_conversation_messages', methods: ['GET'])]
+    public function getMessages(EntityManagerInterface $entityManager, int $conversationId): JsonResponse
+    {
+        $conversation = $entityManager->getRepository(Conversation::class)->find($conversationId);
+        if (!$conversation instanceof Conversation) {
+            return new JsonResponse(['status' => 'error', 'message' => 'Invalid conversation']);
+        }
+
+        $messages = $entityManager->getRepository(Message::class)->findBy(['conversation' => $conversation], ['sentAt' => 'ASC']);
+
+        $messagesData = [];
+        foreach ($messages as $message) {
+            $messagesData[] = [
+                'sender' => $message->getSender()->getUsername(),
+                'content' => $message->getContent(),
+                'sentAt' => $message->getSentAt()->format('Y-m-d H:i:s'),
+            ];
+        }
+
+        return new JsonResponse(['status' => 'success', 'messages' => $messagesData]);
+    }
+
 }
 
 
