@@ -2,6 +2,7 @@
 
 namespace App\Controller;
 
+use App\Entity\Conversation;
 use App\Entity\User;
 use App\Form\UserCityProfileType;
 use App\Form\UserDescriptionProfileType;
@@ -33,6 +34,10 @@ class UserProfileController extends AbstractController
             if (!$friendRequest->getAccepted()) {
                 $unreadRequestsCount++;
             }
+        }
+
+        if (!$user instanceof User) {
+            return $this->redirectToRoute('app_login');
         }
 
         $formUser = $this->createForm(UsernameProfileType::class, $user);

@@ -36,10 +36,17 @@
             </label>
             <ul class="mt-6" id="conversationList">
                 {% for conversation in conversations %}
-                    <li class="py-5 border-b px-3 transition hover:bg-indigo-100" data-conversation-id="{{ conversation.id }}">
+                    <li class="py-5 border-b px-3 transition hover:bg-purple-100 {{ conversation.id in unreadConversations ? 'bg-yellow-100' : '' }}" data-conversation-id="{{ conversation.id }}">
                         <a href="#" class="flex justify-between items-center">
-                            <h3 class="text-lg font-semibold">{{ conversation.participants|first.username }}</h3>
-                            <p class="text-md text-gray-400">{{ conversation.messages|last.sentAt|date('H:i') }} ago</p>
+                            <div class="flex items-center">
+                                {% for participant in conversation.participants %}
+                                    <h3 class="text-lg font-semibold">{{ participant.username }}{% if not loop.last %}, {% endif %}</h3>
+                                {% endfor %}
+                                {% if conversation.unreadCount > 0 %}
+                                    <span class="text-md bg-red-500 text-white rounded-full px-2 py-1 ml-2">{{ conversation.unreadCount }}</span>
+                                {% endif %}
+                            </div>
+                            <p class="text-md text-gray-400">{{ conversation.messages|last.sentAt|date('H:i', 'Europe/Paris') }}</p>
                         </a>
                         <div class="title text-md italic text-gray-400">{{ conversation.messages|last.title }}</div>
                     </li>
@@ -58,30 +65,15 @@
                 </div>
                 <div>
                     <ul class="flex text-gray-400 space-x-4">
-                        <li class="w-6 h-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 15l-3-3m0 0l3-3m-3 3h8M3 12a9 9 0 1118 0 9 9 0 01-18 0z" />
+                        <button id="addParticipantButton" class="bg-purple-400 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6 inline-block mr-2" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
                             </svg>
-                        </li>
-                        <li class="w-6 h-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 9l3 3m0 0l-3 3m3-3H8m13 0a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            </svg>
-                        </li>
-
-                        <li class="w-6 h-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 17h2a2 2 0 002-2v-4a2 2 0 00-2-2H5a2 2 0 00-2 2v4a2 2 0 002 2h2m2 4h6a2 2 0 002-2v-4a2 2 0 00-2-2H9a2 2 0 00-2 2v4a2 2 0 002 2zm8-12V5a2 2 0 00-2-2H9a2 2 0 00-2 2v4h10z" />
-                            </svg>
-                        </li>
+                            Ajouter un participant
+                        </button>
                         <li class="w-6 h-6">
                             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
-                            </svg>
-                        </li>
-                        <li class="w-6 h-6">
-                            <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 5a2 2 0 012-2h10a2 2 0 012 2v16l-7-3.5L5 21V5z" />
                             </svg>
                         </li>
                     </ul>
@@ -128,7 +120,7 @@
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15.172 7l-6.586 6.586a2 2 0 102.828 2.828l6.414-6.586a4 4 0 00-5.656-5.656l-6.415 6.585a6 6 0 108.486 8.486L20.5 13" />
                         </svg>
                     </button>
-                    <button id="replyButton" class="bg-purple-600 text-white px-6 py-2 rounded-xl">Reply</button>
+                    <button id="replyButton" class="bg-purple-400 hover:bg-purple-700 text-white px-6 py-2 rounded-xl">Reply</button>
                 </div>
             </section>
         </section>
@@ -144,6 +136,7 @@
                 <h2 class="text-xl font-semibold text-gray-800">Send Message</h2>
             </div>
 
+{#            Modal pour un nouveau message#}
             <div class="w-full p-6">
                 <div class="mb-4">
                     <label for="recipient" class="text-sm font-medium text-gray-700">Destinataire</label>
@@ -166,6 +159,31 @@
             <div class="px-6 py-4 bg-gray-100 border-t border-gray-200 w-full flex justify-end items-center gap-4">
                 <button id="sendButton" type="submit" form="sendMessageForm" class="bg-green-500 hover:bg-green-600 px-4 py-2 rounded text-white focus:outline-none">Send</button>
                 <button onclick="openModal(false)" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded text-white focus:outline-none">Close</button>
+            </div>
+        </div>
+    </div>
+
+{#    Modal pour ajouter un participant#}
+    <div id="addParticipantModal" class="fixed top-0 left-0 w-full h-full bg-gray-900 bg-opacity-50 hidden flex justify-center items-center">
+        <div class="bg-white rounded-lg w-1/2 mx-auto">
+            <div class="flex justify-between items-center p-6 border-b border-gray-200">
+                <p class="text-lg font-semibold">Ajouter un participant</p>
+                <button id="closeModalButton" class="text-gray-400 hover:text-gray-500">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+            <div class="p-6">
+                <label for="userSelect" class="block text-sm font-medium text-gray-700">Sélectionner un utilisateur</label>
+                <select name="newRecipient" id="newRecipient" class="w-full p-3 mt-2 border rounded-md focus:outline-none focus:ring focus:border-blue-300">
+                    {% for user in users %}
+                        <option value="{{ user.id }}">{{ user.username}}</option>
+                    {% endfor %}
+                </select>
+                <button id="addParticipantSubmitButton" class="mt-4 bg-purple-400 hover:bg-purple-700 text-white font-bold py-2 px-4 rounded">
+                    Ajouter
+                </button>
             </div>
         </div>
     </div>
