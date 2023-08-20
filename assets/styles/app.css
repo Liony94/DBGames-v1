@@ -73,6 +73,13 @@ input[name="description_profile[description]"]:focus {
     display: none;
 }
 
+.notification-container {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: -10px; /* Déplace légèrement les icônes vers le haut */
+}
+
 .notification-dot {
     position: relative;
 }
@@ -89,8 +96,8 @@ input[name="description_profile[description]"]:focus {
 }
 
 .notification-icon {
-    margin-top: -10px;
-    margin-right: -70px;
+    position: relative;
+    margin-right: 20px; /* Ajoute de l'espace entre les icônes */
 }
 
 .notification-indicator {
@@ -115,6 +122,5 @@ input[name="description_profile[description]"]:focus {
     right: 0;
     z-index: 1000;
 }
-
 
 
