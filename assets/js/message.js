@@ -107,4 +107,43 @@ document.addEventListener("DOMContentLoaded", function() {
             conversationElement.click();
         }
     }
+
+    document.getElementById("addParticipantButton").addEventListener("click", function() {
+        document.getElementById("addParticipantModal").classList.remove("hidden");
+    });
+
+    document.getElementById("closeModalButton").addEventListener("click", function() {
+        document.getElementById("addParticipantModal").classList.add("hidden");
+    });
+
+    document.getElementById("addParticipantSubmitButton").addEventListener("click", function(event) {
+        event.preventDefault();
+
+        const userId = document.getElementById("newRecipient").value;
+        const conversationId = localStorage.getItem('lastConversationId');
+
+        if (!conversationId) {
+            console.error("No conversation ID provided");
+            return;
+        }
+
+        fetch(`/conversation/${conversationId}/add-participant`, {
+            method: "POST",
+            body: new URLSearchParams({ user_id: userId }),
+            headers: {
+                "Content-Type": "application/x-www-form-urlencoded"
+            }
+        })
+            .then(response => response.json())
+            .then(data => {
+                console.log(data);
+                if (data.status === 'success') {
+                    alert('Participant added successfully');
+                    location.reload();
+                } else {
+                    alert('Error: ' + data.message);
+                }
+                document.getElementById("addParticipantModal").classList.add("hidden");
+            });
+    });
 });
