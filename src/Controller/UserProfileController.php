@@ -27,6 +27,7 @@ class UserProfileController extends AbstractController
         }
 
         $numberOfFriends = count($user->getFriends());
+        $numberOfMessages = count($user->getMessages());
 
         $receivedFriendRequests = $user->getReceivedFriendRequests();
         $unreadRequestsCount = 0;
@@ -55,7 +56,8 @@ class UserProfileController extends AbstractController
             'formCity' => $formCity->createView(),
             'formGames' => $formGames->createView(),
             'numberOfFriends' => $numberOfFriends,
-            'unreadRequestsCount' => $unreadRequestsCount
+            'unreadRequestsCount' => $unreadRequestsCount,
+            'numberOfMessages' => $numberOfMessages
         ]);
     }
 
@@ -78,12 +80,14 @@ class UserProfileController extends AbstractController
         $requestSent = $this->requestSent($currentUser, $user);
 
         $numberOfFriends = count($user->getFriends());
+        $numberOfMessages = count($user->getMessages());
 
         return $this->render('user_profile/profileId.html.twig', [
             'user' => $user,
             'areFriends' => $areFriends,
             'requestSent' => $requestSent,
-            'numberOfFriends' => $numberOfFriends
+            'numberOfFriends' => $numberOfFriends,
+            'numberOfMessages' => $numberOfMessages
         ]);
     }
 

@@ -77,7 +77,7 @@ input[name="description_profile[description]"]:focus {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-top: -10px; /* Déplace légèrement les icônes vers le haut */
+    margin-top: -10px;
 }
 
 .notification-dot {
@@ -97,7 +97,7 @@ input[name="description_profile[description]"]:focus {
 
 .notification-icon {
     position: relative;
-    margin-right: 20px; /* Ajoute de l'espace entre les icônes */
+    margin-right: 20px;
 }
 
 .notification-indicator {
